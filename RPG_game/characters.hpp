@@ -1,7 +1,7 @@
 #ifndef characters_hpp
 
 #define characters_hpp
-std::string readFile(std::string look);
+std::string readFile(std::string look,int x, int y, bool specialMode = true);
 std::string putObj(std::string map,std::string look, int x, int y);
 class staticChar 
 {
@@ -27,11 +27,11 @@ private:
 
 
 		}
-		//std::cout << "\n------";
+		
 		return false;
 	}
 	std::string parse(std::string look) {
-		return readFile(look);
+		return readFile(look,x+mapSizeX/2,y + mapSizeY/2 );
 		//in case any special rules are implemented, deal with them here
 	}
 

@@ -21,15 +21,40 @@ std::string putMap() {
 	return s;
 }
 void drawMap(std::string map) {
+	int actualPos = 0;
+	std::cout << "sucess\n";
+	int posSkip = map.find("☺");
+	//std::cout << mapInject.arr;
+	int curInject = 0;
+	std::cout << map.length() << "\n\n^^\n";
+	std::cout << mapInject.arr.substr(150,700);
+	//std::cout << mapInject.get(9).pos;
+
+
+	
 	for (int i = 0; map.length() > i;i++) {
 		//loop through mapInject here
-		for (int j = 0; mapInject.size > j; j++) {
-			if (mapInject.get(j).pos == i+charPosX + (charPosY * (mapSizeX+1) )  ) {
-				std::cout << mapInject.get(j).value;
-			}
+		
+		
+		
+			//this needs to run a sub string of whatever length the happy face is
+			
+		//std::cout << i << "\n";
+		//std::cout << curInject<< "\n";
+		std::cout << mapInject.get(curInject).pos;
+		if (mapInject.get(curInject).pos == actualPos+charPosX + (charPosY * (mapSizeX+1) )  ) {
+			std::cout << mapInject.get(curInject).value;
+			curInject ++;
 		}
-		std::cout << map[i];
+
+		
+		if (i == posSkip) {
+				actualPos -= 2;
+			}
+		actualPos ++;
+		std::cout << map[i]; //re add this when possible, turned off for debugging
 	}
+	
 }
 std::string putObj(std::string map, std::string obj, int locX, int locY) {
 	int curY = locY + mapSizeY/2; //add scroll properties
@@ -89,67 +114,105 @@ std::string putChar(std::string map) {
 	//map[ (mapSizeX+1) * int(mapSizeY/2) + ( int((mapSizeX)/2) ) +1 ] = '-';
 	return map;
 }
-std::string readFile(std::string file) {
+std::string readFile(std::string file, int addX , int addY, bool specialMode) {
 	//add creating color, so using the /r maybe for read or something like that
 	std::ifstream inFile;
 	inFile.open(file);
 	std::string x;
+	
 	char z;
 	std::string res = "";
 	bool onSpecial = false;
-	int count = 0;
+	bool superSpecial = false;
+	int count = addX + (addY*(mapSizeX+1) );
+	int distToT = 0;
+	std::string numCount = "";
 	while (inFile >> z) {
 		x = z;
-		//std::cout << "running";
-		if (x == "\\") {
+		
+			if (x == "\\") {
 
-			onSpecial = true;
+				onSpecial = true;
 
-		}
-		//problem with all these large string
-		if (onSpecial) {
-			if (x == "S") {
-			x = " ";
-			onSpecial = false;
 			}
-			//red
-			if (x == "R") {
-			mapInject.push(std::to_string(count),"\033[31m") ;
-			onSpecial = false;
-			x = '\033';
-			std::cout << "pushed";
-			}
-			//green
-			if (x == "G") {
-			mapInject.push(std::to_string(count),"\033[32m") ;
-			onSpecial = false;
-			x = '\033';
-			std::cout << "pushed";
-			}
-			//reset
-			if (x == "T") {
-			mapInject.push(std::to_string(count),"\033[30m") ;
-			onSpecial = false;
-			x = '\033';
-			std::cout << "pushed";
-			}
-			if (x == "N") {
-				x = "\n";
+			if (onSpecial) {
+				if (x == "S") {
+				x = " ";
 				onSpecial = false;
+
+				}
+				//red
+				if (x == "R") {
+				mapInject.push(std::to_string(count),"\033[31m") ;
+				onSpecial = false;
+				x = '\033';
+				
+				distToT = 0;
+				}
+				//green
+				if (x == "G") {
+				mapInject.push(std::to_string(count),"\033[32m") ;
+				onSpecial = false;
+				x = '\033';
+				
+				distToT = 0;
+				}
+				if (x == "]") {
+					x = '\033';
+					//"\033[38;5;120m"
+					if (specialMode) {
+						mapInject.push(std::to_string(count),"\033[38;5;" + numCount + "m") ;
+					}
+					numCount = "";
+					superSpecial = false;
+					onSpecial = false;
+				}
+				if (superSpecial == true ) {
+					numCount += x;
+					
+					x = '\033';
+
+				}
+				if (x == "[") {
+				
+				x = '\033';
+				numCount = "";
+				superSpecial = true;
+				onSpecial = true;
+				}
+				
+
+				//reset
+				if (x == "T") {
+				mapInject.push(std::to_string(count),"\033[30m") ;
+				onSpecial = false;
+				x = '\033';
+				
+
+				}
+				if (x == "N") {
+					count += mapSizeX-distToT ; //its here, the pointer is going at the line below, instead of going back to the start
+					x = "\n";
+					onSpecial = false;
+					distToT = 0;
+				}
+				
 			}
-			
-		}
+		
 		if (!onSpecial) {
 			
 			if ( !(x == "\033") ) {
 				res += x;
 				count++;
+				distToT++;
+
 			}
 		}
 		
 	}
 	return res;
 }
+
 
 
 

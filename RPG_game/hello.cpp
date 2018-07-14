@@ -3,10 +3,28 @@
 #include "rpgFunc.hpp"
 //using namespace std;
 
+
+//PROBSBLy FASTER FORM OF GET, RIGHT NOW IT HAS TO LOOP FROM THE STRAT< COULD SPECIFIY START CORDINATEs
+//Order inject to make it run faster !!!
+//ALSO, DONT REPRINT IF THE SAME VALUE AS LAST TIME
+//Needs speed improvements
+//One is that it should only print one new line, instead of reprinting the entire map
+//also, preload map
+
+//ERROR IN DRAW MAP
+
 #include <stdlib.h> //for system
+//make this into something nice, like walking past memories
 //reload
 /*
- .
+	ALSO, SEE HERE FOR COLOR: http://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
+	Use this for the pattern:https://jonasjacek.github.io/colors/
+	coudl use this site: https://manytools.org/hacker-tools/convert-images-to-ascii-art/go
+	and then parse the data
+*/
+//NOT WORKING IF SMILEY FACE GOES PAST THE DRAW SYMBOLS
+/*
+ ...................
  ...................................................................................
  ........................................................................................
 */
@@ -27,20 +45,30 @@ void run(std::string MAP);
 staticChar slime;
 int main() 
 {
-	slime._init_(0,-5,"slime.txt");
-	std::string res = "";
 	mapInject.create();
-	res = readFile("map.txt");
-	std::cout << mapInject.arr;
+	//slime._init_(-12,2,"slime.txt");
+	std::string res = ""; 
 
+
+	res = readFile("map.txt",0,0,true); //were going to create the file
+	
+
+	mapInject.loadFile();
+	
+	
+	//mapInject.finish(); //sort it, were now done
+	//mapInject.intoFile();
 	/*
 	while(true) {
+		 
 		
-		//run(res);
+		run(res);
 		
 		
 	}
 	*/
+	
+	
 	
 	
 	
@@ -49,23 +77,22 @@ int main()
 
 void run(std::string MAP) {
 	std::string map = putMap();
+	
 	update();
 	 	
-	map = putObj(map, MAP,-mapSizeX/2,-mapSizeY/2);
-	map = putObj(map, "******\n*    *\n******",-30,-30);
-	map = slime.display(map);
+	map = putObj(map, MAP,0,0);
+	
+	//map = slime.display(map);
 	map = putChar(map);
-	slime.display(map);
+	//slime.display(map);
+
 	drawMap(map);
 
 
 	move();
 	reset();
-		
+	
 }
 
 
 
-
-//Instead of actually printing when using a function, reutrn what is displays on line 0-x
-//each function should do this, so that then they can all be printed together
