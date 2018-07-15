@@ -72,13 +72,8 @@ public:
 					if (cur == '!') {
 						Current = "\033" +  std::string(Current.substr(8)) ;
 
-						/*
-						std::cout <<Current;
-
-						//std::cout << "\n" ;
-						std::cout << "hi";
-						*/
-						std::cout << arr;
+						
+						
 						arr += "|";
 						arr += Current;
 						Current = "";
@@ -88,7 +83,7 @@ public:
 						
 					}
 					else {
-						//std::cout << Current << "\n";
+						
 
 						Current += cur;
 					}
@@ -158,14 +153,14 @@ public:
 			create+= arr[start++];
 
 		}
-		int end = 0;
+	
 		
 		std::string pos = readUntil('|',create,0);
 		pos.erase(pos.length()-1);
 		std::string value = readAfter('|',create);
 		posString finalRes = {stoi(pos),value};
 		
-		nextCur finalRes2 = {end,finalRes};
+		nextCur finalRes2 = {start+1,finalRes};
 		//gets quikcly the start and the end
 		return finalRes2;
 

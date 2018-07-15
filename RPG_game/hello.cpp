@@ -1,6 +1,11 @@
 #include <iostream>
 #include <unistd.h>
 #include "rpgFunc.hpp"
+
+//NOTE: THER ENEDS TO BE SOME INSERTION OF A \N INTO THE MAP WHEN USING PUT OBJ, OTHERWISE IT WONT KNOW WHEN TO GO TO A NEWLINE
+
+
+//NOT LOADIGN MAP CORRECTly, its breaking it
 //using namespace std;
 
 
@@ -49,16 +54,28 @@ int main()
 	//slime._init_(-12,2,"slime.txt");
 	std::string res = ""; 
 
+	//std::string resT = readFile("map.txt",0,0,true);
+	std::string resT = "";
+	std::ifstream inFile;
+	inFile.open("map.txt");
+	std::string x;
+	char z;
+	while(inFile >> z) {
+		resT += z;
+	}
 
-	res = readFile("map.txt",0,0,true); //were going to create the file
-	
 
-	mapInject.loadFile();
+	res = readFilePrint(resT,true,false); //were going to create the file
 	
+	//std::cout << res;
+	//mapInject.loadFile();
+	//mapInject.finish();
 	
 	//mapInject.finish(); //sort it, were now done
 	//mapInject.intoFile();
-	/*
+
+
+	
 	while(true) {
 		 
 		
@@ -66,14 +83,15 @@ int main()
 		
 		
 	}
-	*/
+	
+	
 	
 	
 	
 	
 	
 }
-
+//the put char is not working
 
 void run(std::string MAP) {
 	std::string map = putMap();
@@ -86,8 +104,8 @@ void run(std::string MAP) {
 	map = putChar(map);
 	//slime.display(map);
 
-	drawMap(map);
-
+	//readFilePrint(map);
+	drawMap(MAP,charPosX,mapSizeX*mapSizeY);
 
 	move();
 	reset();

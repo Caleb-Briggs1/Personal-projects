@@ -20,33 +20,40 @@ std::string putMap() {
 	}
 	return s;
 }
-void drawMap(std::string map) {
+void drawMap(std::string map, int start = 0,int end = 0) {
 	int actualPos = 0;
-	std::cout << "sucess\n";
 	int posSkip = map.find("☺");
-	//std::cout << mapInject.arr;
-	int curInject = 0;
-	std::cout << map.length() << "\n\n^^\n";
-	std::cout << mapInject.arr.substr(150,700);
-	//std::cout << mapInject.get(9).pos;
-
-
+	//int curInject = 0;
+	int nxItem;
+	//nextCur val =  mapInject.getFast(0);
 	
-	for (int i = 0; map.length() > i;i++) {
+	//USE FAST GET FOR HERE< CAN RUN MUCH FASTER
+	//for (int i = start; map.length() > i;i++) {
+	for (int i = start; end > i;i++) {
 		//loop through mapInject here
-		
 		
 		
 			//this needs to run a sub string of whatever length the happy face is
 			
-		//std::cout << i << "\n";
-		//std::cout << curInject<< "\n";
-		std::cout << mapInject.get(curInject).pos;
-		if (mapInject.get(curInject).pos == actualPos+charPosX + (charPosY * (mapSizeX+1) )  ) {
-			std::cout << mapInject.get(curInject).value;
-			curInject ++;
-		}
+		//use fast get for this
 
+
+		//if (val.cur.pos == actualPos+charPosX + (charPosY * (mapSizeX+1) )  ) {
+
+
+		//GETS STUCK ON REPEAT
+
+		/*
+		if (val.cur.pos == actualPos+charPosX + (charPosY * (mapSizeX+1) )  ) {
+
+			std::cout << val.cur.value;
+			nxItem = val.cur.pos;
+			while(nxItem >= val.cur.pos) {
+				val = mapInject.getFast(val.next);
+			}
+
+		}
+		*/
 		
 		if (i == posSkip) {
 				actualPos -= 2;
@@ -54,6 +61,7 @@ void drawMap(std::string map) {
 		actualPos ++;
 		std::cout << map[i]; //re add this when possible, turned off for debugging
 	}
+	
 	
 }
 std::string putObj(std::string map, std::string obj, int locX, int locY) {
@@ -212,6 +220,130 @@ std::string readFile(std::string file, int addX , int addY, bool specialMode) {
 	}
 	return res;
 }
+
+
+
+
+
+
+
+
+
+std::string readFilePrint(std::string file, bool specialMode=false,bool print = false) {
+	//add creating color, so using the /r maybe for read or something like that
+	std::string x;
+	
+	char z;
+	std::string res = "";
+	bool onSpecial = false;
+	bool superSpecial = false;
+	int count = 0;
+	int distToT = 0;
+	std::string numCount = "";
+	for (int i = 0; file.length() > i; i++) { 
+		x = file[i];
+		
+			if (x == "\\") {
+
+				onSpecial = true;
+
+			}
+			if (onSpecial) {
+				if (x == "S") {
+				x = " ";
+				onSpecial = false;
+
+				}
+				//red
+				if (x == "R") {
+					if (print) {
+						std::cout << "\033[31m" ;
+					}
+					else {
+						res += "\033[31m" ;
+					}
+				onSpecial = false;
+				x = '\033';
+				
+				distToT = 0;
+				}
+				//green
+				if (x == "G") {
+					if (print) {
+						std::cout << "\033[32m" ;
+					}
+					else {
+						res += "\033[32m" ;
+					}
+				onSpecial = false;
+				x = '\033';
+				
+				distToT = 0;
+				}
+				if (x == "]") {
+					x = '\033';
+					//"\033[38;5;120m"
+					if (specialMode) {
+						std::cout << ("\033[38;5;" + numCount + "m") ;
+						res += ("\033[38;5;" + numCount + "m");
+					}
+					numCount = "";
+					superSpecial = false;
+					onSpecial = false;
+				}
+				if (superSpecial == true ) {
+					numCount += x;
+					
+					x = '\033';
+
+				}
+				if (x == "[") {
+				
+				x = '\033';
+				numCount = "";
+				superSpecial = true;
+				onSpecial = true;
+				}
+				
+
+				//reset
+				if (x == "T") {
+					if (print) {
+						std::cout << "\033[30m" ;
+					}
+					else {
+						res += "\033[30m";
+					}
+				onSpecial = false;
+				x = '\033';
+				
+
+				}
+				if (x == "N") {
+					
+					x = "\n";
+					onSpecial = false;
+				}
+				
+			}
+		
+		if (!onSpecial) {
+			
+			if ( !(x == "\033") ) {
+				if (print) {
+					std::cout << x;
+				}
+				else {
+					res += x;
+				}
+
+			}
+		}
+		
+	}
+	return res;
+}
+
 
 
 
